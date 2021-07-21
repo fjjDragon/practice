@@ -1,7 +1,7 @@
 package com.fjj.pack;
 
 import com.fjj.util.ArraysUtil;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * DP系列——背包问题
@@ -9,11 +9,11 @@ import lombok.Data;
  * @author: fjjdragon
  * @date: 2019-08-28 17:38
  */
-@Data
+@Getter
 public class Pack {
-    private int[] w = {0, 1, 2, 2, 3, 4};
-    private int[] value = {0, 2, 3, 3, 4, 5};
-    private int N = 5, V = 8;
+    private int[] Wi = {0, 2, 2, 6, 5, 4};
+    private int[] Vi = {0, 6, 3, 5, 4, 6};
+    private int N = 5, W = 10;
     private int[][] F;
     private int[] item = new int[N + 1];
 
@@ -22,11 +22,14 @@ public class Pack {
      * 根据状态公式，生成记号表
      */
     public void first() {
-        F = new int[N + 1][V + 1];
+        F = new int[N + 1][W + 1];
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= V; j++) {
-                if (j - w[i] < 0) continue;
-                F[i][j] = Math.max(F[i - 1][j], F[i - 1][j - w[i]] + value[i]);
+            for (int j = 1; j <= W; j++) {
+                if (j - Wi[i] < 0) {
+//                    F[i][j] = F[i - 1][j];
+                    continue;
+                }
+                F[i][j] = Math.max(F[i - 1][j], F[i - 1][j - Wi[i]] + Vi[i]);
             }
         }
 //        System.out.println(Arrays.deepToString(F));
@@ -45,9 +48,9 @@ public class Pack {
                 if (F[i][j] == F[i - 1][j]) {
                     item[i] = 0;
                     second(i - 1, j);
-                } else if (j - w[i] >= 0 && F[i][j] == F[i - 1][j - w[i]] + value[i]) {
+                } else if (j - Wi[i] >= 0 && F[i][j] == F[i - 1][j - Wi[i]] + Vi[i]) {
                     item[i] = 1;
-                    second(i - 1, j - w[i]);
+                    second(i - 1, j - Wi[i]);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

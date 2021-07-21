@@ -14,7 +14,7 @@ public class Test1 {
     public static void main(String[] args) {
         Pack pack = new Pack();
         pack.first();
-        pack.second(pack.getN(), pack.getV());
+        pack.second(pack.getN(), pack.getW());
         System.out.println(Arrays.toString(pack.getItem()));
     }
 
